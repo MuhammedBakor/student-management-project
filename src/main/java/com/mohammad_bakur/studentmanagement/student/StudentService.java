@@ -1,32 +1,38 @@
 package com.mohammad_bakur.studentmanagement.student;
 
+import com.mohammad_bakur.studentmanagement.student.models.Student;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class StudentService {
+    private final StudentDAO studentDao;
 
-    public List<Student> findAllStudents(){
-        return List.of(
-                new Student(
-                        "Mohammad",
-                        "Bakur", LocalDate.now(),
-                        "moody@Gmail.com",
-                        24),
-
-                new Student(
-                        "Ahmed",
-                        "Bakur", LocalDate.now(),
-                        "ahmed@Gmail.com",
-                        22),
-
-                new Student(
-                        "Hamdan",
-                        "Bakur", LocalDate.now(),
-                        "hmdan@Gmail.com",
-                        20)
-        );
+    public StudentService(@Qualifier("jpa") StudentDAO studentDao) {
+        this.studentDao = studentDao;
     }
+
+    public Student addUser(Student s) {
+        return studentDao.insertStudent(s);
+    }
+
+    public List<Student> findAllStudents() {
+        return studentDao.findAllStudents();
+    }
+
+
+    public Student findByEmail(String email) {
+        return studentDao.findStudentByEmail(email);
+    }
+
+    public Student update(Student s) {
+        return studentDao.updateStudent(s);
+    }
+
+    public void delete(Integer id) {
+        studentDao.removeStudent(id);
+    }
+
 }
